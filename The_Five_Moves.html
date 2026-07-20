@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Five Moves · A drill pack for flow control</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f4ee;
+  --panel:#ffffff;
+  --ink:#23201c;
+  --ink-soft:#5d574e;
+  --ink-faint:#8b8377;
+  --rail:#1e2a32;
+  --rail-ink:#c9d4da;
+  --rule:#e2dcd1;
+
+  --situation:#3d6b8c;
+  --situation-bg:#eef4f8;
+  --resolution:#3f7a52;
+  --resolution-bg:#eef6f0;
+  --rule-c:#8a6d1f;
+  --rule-bg:#faf5e6;
+  --trap:#a8452f;
+  --trap-bg:#fbeeea;
+  --code-c:#5a4a7a;
+  --code-bg:#f4f1f8;
+
+  --outer:#c2621f;
+  --middle:#2f6ea8;
+  --inner:#3f7a52;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  font-size:16.5px;
+}
+
+/* ---------- layout ---------- */
+.shell{display:flex;min-height:100vh}
+
+.rail{
+  width:270px;
+  flex:0 0 270px;
+  background:var(--rail);
+  color:var(--rail-ink);
+  padding:38px 26px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+.rail h1{
+  font-family:'IBM Plex Serif',serif;
+  font-size:21px;
+  line-height:1.3;
+  color:#fff;
+  margin:0 0 6px;
+  font-weight:600;
+}
+.rail .sub{
+  font-size:12.5px;
+  color:#8fa3ad;
+  line-height:1.5;
+  margin:0 0 30px;
+  font-style:italic;
+}
+.rail .grouplabel{
+  font-size:10.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#6e838e;
+  margin:26px 0 10px;
+  font-weight:600;
+}
+.rail a{
+  display:block;
+  color:var(--rail-ink);
+  text-decoration:none;
+  font-size:14px;
+  padding:6px 0 6px 12px;
+  border-left:2px solid transparent;
+  line-height:1.4;
+}
+.rail a:hover{color:#fff;border-left-color:#5c7a89}
+
+.main{
+  flex:1;
+  max-width:920px;
+  padding:60px 70px 140px;
+}
+
+/* ---------- headings ---------- */
+.hero{margin-bottom:60px}
+.hero .kicker{
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+  font-weight:600;
+  margin-bottom:16px;
+}
+.hero h2{
+  font-family:'IBM Plex Serif',serif;
+  font-size:44px;
+  line-height:1.15;
+  margin:0 0 20px;
+  font-weight:600;
+}
+.hero .standfirst{
+  font-size:19px;
+  color:var(--ink-soft);
+  line-height:1.7;
+  max-width:640px;
+}
+
+section{margin-bottom:80px;scroll-margin-top:30px}
+
+.sectionhead{
+  border-top:2px solid var(--ink);
+  padding-top:14px;
+  margin-bottom:34px;
+}
+.sectionhead .num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--ink-faint);
+  letter-spacing:.12em;
+  display:block;
+  margin-bottom:8px;
+}
+.sectionhead h3{
+  font-family:'IBM Plex Serif',serif;
+  font-size:30px;
+  margin:0;
+  font-weight:600;
+  line-height:1.25;
+}
+
+h4{
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:19px;
+  font-weight:600;
+  margin:44px 0 14px;
+  line-height:1.4;
+}
+
+p{margin:0 0 16px}
+p + p{margin-top:10px}
+
+/* ---------- panels ---------- */
+.panel{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-left:4px solid var(--ink-faint);
+  padding:24px 28px;
+  margin:26px 0;
+  border-radius:3px;
+}
+.panel .label{
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  display:block;
+  margin-bottom:12px;
+}
+.panel p:last-child{margin-bottom:0}
+
+.p-situation{border-left-color:var(--situation);background:var(--situation-bg)}
+.p-situation .label{color:var(--situation)}
+
+.p-resolution{border-left-color:var(--resolution);background:var(--resolution-bg)}
+.p-resolution .label{color:var(--resolution)}
+
+.p-rule{border-left-color:var(--rule-c);background:var(--rule-bg)}
+.p-rule .label{color:var(--rule-c)}
+
+.p-trap{border-left-color:var(--trap);background:var(--trap-bg)}
+.p-trap .label{color:var(--trap)}
+
+.p-plain{
+  border-left-color:var(--ink-faint);
+  background:#fbf9f5;
+  font-family:'IBM Plex Serif',serif;
+  font-style:italic;
+  font-size:17px;
+}
+.p-plain .label{color:var(--ink-faint);font-style:normal;font-family:'IBM Plex Sans',sans-serif}
+.p-plain strong{font-style:normal;font-weight:600}
+
+/* ---------- the five moves ---------- */
+.move{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:0;
+  margin:30px 0;
+  overflow:hidden;
+}
+.move .movehead{
+  background:var(--rail);
+  color:#fff;
+  padding:18px 28px;
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+}
+.move .movenum{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:#7e97a4;
+  letter-spacing:.1em;
+}
+.move .movename{
+  font-family:'IBM Plex Serif',serif;
+  font-size:23px;
+  font-weight:600;
+  letter-spacing:.04em;
+}
+.move .movebody{padding:26px 28px 28px}
+.move .thequestion{
+  font-family:'IBM Plex Serif',serif;
+  font-style:italic;
+  font-size:18.5px;
+  color:var(--situation);
+  border-left:3px solid var(--situation);
+  padding-left:16px;
+  margin:0 0 22px;
+  line-height:1.6;
+}
+
+/* running example strip */
+.applied{
+  background:#fdf6ec;
+  border:1px solid #e8d6bb;
+  border-left:4px solid var(--outer);
+  border-radius:3px;
+  padding:22px 26px;
+  margin:24px 0 6px;
+}
+.applied .label{
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--outer);
+  display:block;
+  margin-bottom:14px;
+}
+.applied .answer{
+  font-family:'IBM Plex Serif',serif;
+  font-size:19px;
+  line-height:1.6;
+  color:#7a3e0e;
+  margin:0 0 14px;
+}
+.applied p:last-child{margin-bottom:0}
+.applied table{margin:14px 0}
+
+.cart{
+  background:var(--panel);
+  border:2px solid var(--outer);
+  border-radius:4px;
+  padding:26px 30px;
+  margin:26px 0;
+}
+.cart .cartlabel{
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--outer);
+  display:block;
+  margin-bottom:14px;
+}
+.cart h4{margin-top:0}
+
+.mantra{
+  text-align:center;
+  font-family:'IBM Plex Serif',serif;
+  font-size:26px;
+  letter-spacing:.06em;
+  color:var(--ink);
+  background:#fbf9f5;
+  border-top:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+  padding:26px 20px;
+  margin:34px 0;
+}
+.mantra small{
+  display:block;
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:13px;
+  letter-spacing:.02em;
+  color:var(--ink-faint);
+  margin-top:12px;
+  font-style:italic;
+}
+
+/* ---------- lists ---------- */
+ul,ol{margin:0 0 18px;padding-left:22px}
+li{margin-bottom:11px;line-height:1.7}
+li:last-child{margin-bottom:0}
+ul.spaced li{margin-bottom:16px}
+
+/* ---------- code ---------- */
+pre{
+  background:#1e2a32;
+  color:#dfe7ec;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13.5px;
+  line-height:1.75;
+  padding:20px 24px;
+  border-radius:4px;
+  overflow-x:auto;
+  margin:20px 0;
+}
+pre.light{
+  background:#f4f1f8;
+  color:#3a3346;
+  border:1px solid #e0d9ea;
+}
+code{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.92em;
+  background:#efeae0;
+  padding:1px 5px;
+  border-radius:3px;
+}
+pre code{background:none;padding:0;font-size:inherit}
+
+.cmt{color:#7d94a1}
+.kw{color:#e0a05c}
+.str{color:#96c8a2}
+.num{color:#c9a2d8}
+
+.lyr-outer{color:var(--outer);font-weight:600}
+.lyr-middle{color:var(--middle);font-weight:600}
+.lyr-inner{color:var(--inner);font-weight:600}
+pre .lyr-outer{color:#f0a15e}
+pre .lyr-middle{color:#7fc0f0}
+pre .lyr-inner{color:#8fd6a5}
+
+/* ---------- tables ---------- */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:22px 0;
+  font-size:15px;
+  background:var(--panel);
+  border:1px solid var(--rule);
+}
+th{
+  background:#efeae0;
+  text-align:left;
+  padding:11px 15px;
+  font-weight:600;
+  font-size:12.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);
+}
+td{
+  padding:12px 15px;
+  border-bottom:1px solid var(--rule);
+  vertical-align:top;
+  line-height:1.6;
+}
+tr:last-child td{border-bottom:none}
+
+/* ---------- drills ---------- */
+.tier{
+  margin:44px 0 26px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--rule);
+}
+.tier .tiername{
+  font-family:'IBM Plex Serif',serif;
+  font-size:22px;
+  font-weight:600;
+  margin:0 0 6px;
+}
+.tier .tiernote{
+  font-size:15px;
+  color:var(--ink-soft);
+  font-style:italic;
+  margin:0;
+}
+
+.drill{
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:22px 26px;
+  margin:20px 0;
+}
+.drill .dhead{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--rule);
+}
+.drill .dnum{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:#fff;
+  background:var(--rail);
+  padding:3px 9px;
+  border-radius:3px;
+  letter-spacing:.06em;
+}
+.drill .dname{
+  font-weight:600;
+  font-size:17px;
+}
+.drill p{margin-bottom:0}
+.drill .twist{
+  margin-top:16px;
+  padding:13px 16px;
+  background:var(--rule-bg);
+  border-left:3px solid var(--rule-c);
+  font-size:15px;
+  font-style:italic;
+  color:#6b5518;
+  border-radius:0 3px 3px 0;
+}
+
+/* ---------- sheet ---------- */
+.sheet{
+  background:#fbf9f5;
+  border:1px dashed #c3b9a6;
+  border-radius:4px;
+  padding:26px 30px;
+  margin:24px 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13.5px;
+  line-height:2.1;
+  color:var(--ink-soft);
+  white-space:pre-wrap;
+}
+.sheet b{color:var(--ink);font-weight:600}
+
+.footer{
+  margin-top:90px;
+  padding-top:24px;
+  border-top:1px solid var(--rule);
+  font-size:13.5px;
+  color:var(--ink-faint);
+  line-height:1.7;
+}
+
+@media (max-width:1000px){
+  .shell{flex-direction:column}
+  .rail{width:100%;flex:none;height:auto;position:static;padding:26px}
+  .main{padding:36px 24px 90px}
+  .hero h2{font-size:32px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<nav class="rail">
+  <h1>The Five Moves</h1>
+  <p class="sub">Reading a scenario, finding the order of questions, and only then writing Python.</p>
+
+  <div class="grouplabel">The Method</div>
+  <a href="#why">Why this exists</a>
+  <a href="#cart">The coffee cart</a>
+  <a href="#moves">The five moves</a>
+  <a href="#m1">1 · Scene</a>
+  <a href="#m2">2 · Clues</a>
+  <a href="#m3">3 · Carrier</a>
+  <a href="#m4">4 · Order</a>
+  <a href="#m5">5 · Silhouette</a>
+
+  <div class="grouplabel">The Tools</div>
+  <a href="#sheet">The blank sheet</a>
+  <a href="#syntax">The syntax spine</a>
+  <a href="#colon">The colon rule</a>
+  <a href="#fstring">f-strings</a>
+  <a href="#twof">The .2f specifier</a>
+
+  <div class="grouplabel">Practice</div>
+  <a href="#worked">Worked example · the vet</a>
+  <a href="#tier1">Tier 1 · drills 1–6</a>
+  <a href="#tier2">Tier 2 · drills 7–13</a>
+  <a href="#tier3">Tier 3 · drills 14–20</a>
+
+  <div class="grouplabel">Afterwards</div>
+  <a href="#after">After each drill</a>
+  <a href="#howto">How to use this pack</a>
+</nav>
+
+<main class="main">
+
+<div class="hero">
+  <div class="kicker">Flow Control · Drill Pack</div>
+  <h2>The Five Moves</h2>
+  <p class="standfirst">One method. Twenty scenarios that share nothing on the surface. Repetition until the scenario stops mattering and the skeleton is all you see.</p>
+</div>
+
+<!-- ============ WHY ============ -->
+<section id="why">
+  <div class="sectionhead">
+    <span class="num">00</span>
+    <h3>Why this document exists</h3>
+  </div>
+
+  <p>You can already follow a decision problem when someone walks you through it. What you cannot yet do is meet a <strong>new</strong> one cold and know where to put your hands.</p>
+
+  <p>That is not a knowledge gap. It is a rehearsal gap. Understanding arrives the first time; it just doesn't stay unless you make it come back.</p>
+
+  <div class="panel p-plain">
+    <span class="label">In plain english</span>
+    <p>One run through a method is something you <strong>did</strong>. Ten runs is something you <strong>know</strong>. Nothing else closes that gap — not better notes, not a cleverer explanation, not more time staring at it.</p>
+  </div>
+
+  <p>So this pack contains exactly one method and twenty scenarios to run it against. The method never changes. The scenarios are deliberately unalike — different worlds, different words, different numbers. That contrast is the point. You are training yourself to see the same skeleton under different meat.</p>
+
+  <h4>Two rules while you work</h4>
+
+  <div class="panel p-rule">
+    <span class="label">Rule</span>
+    <p><strong>No code until the sheet is finished.</strong> Not one line. If you catch yourself typing <code>if</code>, you have skipped ahead — go back.</p>
+    <p><strong>Do the sheet by hand, from memory, every time.</strong> Even when it feels pointless. Especially then. The tenth time you write "Carrier:" without thinking about it is the moment it has landed.</p>
+  </div>
+</section>
+
+<!-- ============ RUNNING EXAMPLE ============ -->
+<section id="cart">
+  <div class="sectionhead">
+    <span class="num">01</span>
+    <h3>First, something to hold</h3>
+  </div>
+
+  <p>A method explained in the abstract slides straight off. You cannot think about "the final result" until you have a task in front of you that has one.</p>
+
+  <p>So before the five moves are described, here is a very small scenario. It stays with you through <strong>every one of them</strong>. Each move gets stated, and then immediately applied to this — so you always have something concrete in your hand when the question arrives.</p>
+
+  <p>It is deliberately tiny. Small enough to hold in your head without effort, which means all your attention can go on the method rather than on the story.</p>
+
+  <div class="cart">
+    <span class="cartlabel">The running scenario · the coffee cart</span>
+
+    <p>Ravi runs a coffee cart outside the station.</p>
+
+    <p>He sells <strong>filter coffee</strong>: £2.20 for a small, £2.80 for a large.</p>
+
+    <p>He also sells <strong>speciality coffee</strong>: £3.10 for a small, £3.90 for a large.</p>
+
+    <p>Customers with a loyalty card get <strong>50p off</strong> whatever their drink costs.</p>
+
+    <p>Ravi needs one amount to charge.</p>
+  </div>
+
+  <p>That is the whole thing. Four prices, one discount. Keep it in mind as you read the next section — every move will be applied to it in an orange panel immediately after the move is explained.</p>
+
+  <div class="panel p-plain">
+    <span class="label">In plain english</span>
+    <p>You are about to learn five questions. Questions need <strong>something to be about</strong>.</p>
+    <p>The coffee cart is that something. It is not the lesson — it is the thing the lesson gets done to.</p>
+  </div>
+</section>
+
+<!-- ============ MOVES ============ -->
+<section id="moves">
+  <div class="sectionhead">
+    <span class="num">02</span>
+    <h3>The five moves</h3>
+  </div>
+
+  <div class="mantra">
+    Scene · Clues · Carrier · Order · Silhouette
+    <small>Say these until they arrive without effort. Everything else hangs off them.</small>
+  </div>
+
+  <p>Each move below has a <strong>question</strong> it asks, and an <strong>output</strong> it produces. The output matters. A move you cannot show the result of is a move you haven't actually done.</p>
+
+  <p>After each move is explained, an <strong style="color:var(--outer)">orange panel</strong> shows that move carried out on Ravi's coffee cart. Read the move, then read the panel, then move on. By the end of this section the cart will be a finished program.</p>
+
+  <!-- MOVE 1 -->
+  <div class="move" id="m1">
+    <div class="movehead">
+      <span class="movenum">MOVE 01</span>
+      <span class="movename">SCENE</span>
+    </div>
+    <div class="movebody">
+      <p class="thequestion">What single result does someone actually need, and what are the big parts?</p>
+
+      <p>Before anything else, finish this sentence:</p>
+
+      <div class="panel p-situation" style="margin-top:14px">
+        <span class="label">Finish the sentence</span>
+        <p style="font-size:19px;font-family:'IBM Plex Serif',serif">At the end, one ______________ must exist.</p>
+      </div>
+
+      <p>A price. A yes or no. A category name. A message. A count.</p>
+
+      <p>If you cannot finish that sentence, you do not yet understand the task, and no amount of <code>if</code> statements will rescue you.</p>
+
+      <p>Then ask whether the job splits into parts that happen <strong>in sequence</strong> — where the second part cannot begin until the first has produced something. Most real tasks do.</p>
+
+      <div class="panel p-resolution">
+        <span class="label">Output of this move</span>
+        <p>One sentence naming the final result, plus a list of the major parts in the order they must happen.</p>
+      </div>
+
+      <div class="applied">
+        <span class="label">Move 1 on the coffee cart</span>
+
+        <p class="answer">At the end, one <strong>drink price in pounds</strong> must exist.</p>
+
+        <p>Ravi does not need a list of prices, or a description, or a category. He needs a single number to ask the customer for.</p>
+
+        <p style="margin-top:14px">Does it split into parts that happen in sequence? Yes, two:</p>
+
+        <ul style="margin-top:10px">
+          <li><strong>Part A</strong> — work out the basic drink price.</li>
+          <li><strong>Part B</strong> — take 50p off if they have a loyalty card.</li>
+        </ul>
+
+        <p>Part B cannot start until Part A has produced a price. There is nothing to take 50p from otherwise. Sequence confirmed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVE 2 -->
+  <div class="move" id="m2">
+    <div class="movehead">
+      <span class="movenum">MOVE 02</span>
+      <span class="movename">CLUES</span>
+    </div>
+    <div class="movebody">
+      <p class="thequestion">What can vary, how many states does each fact have, and where are the boundaries?</p>
+
+      <p>Read the scenario twice. First for the story. Second with a pen, marking every fact that could be different for the next customer, patient, order or pupil.</p>
+
+      <p>For each one, write three things down.</p>
+
+      <table>
+        <tr><th style="width:22%">Name</th><td>What you will call the variable</td></tr>
+        <tr><th>States</th><td>How many different values matter, and what they are</td></tr>
+        <tr><th>Job</th><td>What this fact actually decides</td></tr>
+      </table>
+
+      <p>Counting the states is not bookkeeping. It is your <strong>branch count</strong>. If a fact has three states, you owe the program three branches — and you will know instantly if you have written only two.</p>
+
+      <h4 style="margin-top:32px">Two things to hunt for on purpose</h4>
+
+      <ul class="spaced">
+        <li><strong>Noise.</strong> Facts mentioned in the scenario that cannot change the answer. The customer's name. The street the shop is on. Cross them out deliberately — the act of dismissing a fact is itself a skill, and it is one you have to practise.</li>
+        <li><strong>Boundaries.</strong> "Under 2 kg" and "2 kg or more" is a boundary. Where exactly does one state end and the next begin — and which side does the boundary value itself sit on?</li>
+      </ul>
+
+      <div class="panel p-trap">
+        <span class="label">Trap</span>
+        <p>Boundaries are where most wrong answers come from, and they fail quietly. A program that charges the wrong amount only at exactly 2.0 kg will pass every test you casually throw at it.</p>
+        <p>Write the boundary down in words before you write it in code. <strong>"Under 2"</strong> and <strong>"2 or more"</strong> is a decision you make once, on paper, not a thing you improvise at the keyboard.</p>
+      </div>
+
+      <div class="panel p-resolution">
+        <span class="label">Output of this move</span>
+        <p>A table of facts with their state counts and boundaries, a list of the noise you dismissed, and a total branch count.</p>
+      </div>
+
+      <div class="applied">
+        <span class="label">Move 2 on the coffee cart</span>
+
+        <p>Reading Ravi's scenario again with a pen, three facts can change from customer to customer.</p>
+
+        <table>
+          <tr><th>Fact</th><th>States</th><th>Boundaries</th><th>Job</th></tr>
+          <tr><td><code>coffee_type</code></td><td>2</td><td>filter / speciality</td><td>Selects which price pair applies</td></tr>
+          <tr><td><code>cup_size</code></td><td>2</td><td>small / large</td><td>Picks the price within that pair</td></tr>
+          <tr><td><code>has_loyalty_card</code></td><td>2</td><td>— (true or false)</td><td>Decides whether Part B changes the price</td></tr>
+        </table>
+
+        <p><strong>Noise:</strong> Ravi's name, the station, whether it is takeaway. None of them can move the number, so they are crossed out on purpose.</p>
+
+        <p style="margin-top:14px"><strong>Branch count for Part A:</strong> 2 types × 2 sizes = <strong>four</strong> possible basic prices. And there are indeed exactly four prices in the scenario. The count checks out.</p>
+
+        <p>Part B is a separate two-state decision applied afterwards. It does <strong>not</strong> multiply into Part A — there are not eight routes. That single distinction is the reason Part B ends up outside the nest rather than inside it.</p>
+
+        <p style="margin-top:14px">Note there are no numeric boundaries here. Nothing is "under" or "or more". That makes this scenario an easy one — and it is exactly why the drills add boundaries later.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVE 3 -->
+  <div class="move" id="m3">
+    <div class="movehead">
+      <span class="movenum">MOVE 03</span>
+      <span class="movename">CARRIER</span>
+    </div>
+    <div class="movebody">
+      <p class="thequestion">What one named value travels from part to part?</p>
+
+      <p>This is the move most beginners never make, and it is the one that turns a loose pile of conditions into a machine.</p>
+
+      <p>Somewhere in the task there is a value that is <strong>unknown before</strong> the hard part runs and <strong>known after</strong> it. Every route through the hard part must end by putting something into it. Everything downstream reads from it without caring which route filled it.</p>
+
+      <div class="panel p-plain">
+        <span class="label">In plain english</span>
+        <p>It is <strong>one labelled box</strong>, not one box per outcome.</p>
+        <p>Six possible prices do not mean six variables. They mean six routes that all end up writing into the same box. The next part of the program opens that box and finds one number, and it neither knows nor cares how the number got there.</p>
+      </div>
+
+      <p>A useful way to find it: ask yourself, <em>if I stopped the program halfway, what would I need to be holding in order to carry on?</em> That thing is your carrier.</p>
+
+      <p>Name it now, name it well, and never rename it.</p>
+
+      <h4 style="margin-top:32px">Carriers come in three shapes</h4>
+
+      <ul class="spaced">
+        <li><strong>The single value.</strong> Unknown, then set exactly once. A price, a band name, a decision. Most tasks.</li>
+        <li><strong>The accumulator.</strong> Starts at zero or empty, and grows as the program runs. Running totals, counts, tiered bills.</li>
+        <li><strong>The pair.</strong> Two things must travel together — an amount and a reason, a band and a flag. Rarer, but real.</li>
+      </ul>
+
+      <div class="panel p-resolution">
+        <span class="label">Output of this move</span>
+        <p>The carrier's name, its type, its shape, and what it holds before and after the hard part.</p>
+      </div>
+
+      <div class="applied">
+        <span class="label">Move 3 on the coffee cart</span>
+
+        <p class="answer">The carrier is <strong>drink_price</strong>.</p>
+
+        <table>
+          <tr><th style="width:30%">Name</th><td><code>drink_price</code></td></tr>
+          <tr><th>Type</th><td>number — a float, because it is money</td></tr>
+          <tr><th>Shape</th><td>single value</td></tr>
+          <tr><th>Before Part A</th><td>does not exist yet</td></tr>
+          <tr><th>After Part A</th><td>holds exactly one of 2.20, 2.80, 3.10, 3.90</td></tr>
+          <tr><th>Part B</th><td>reads it, possibly takes 50p off, writes it back</td></tr>
+        </table>
+
+        <p>Apply the test: if you stopped Ravi's program halfway, what would you need to be holding to carry on? A price. That is the carrier.</p>
+
+        <p style="margin-top:14px">And note what it is <strong>not</strong>. It is not four variables called <code>filter_small</code>, <code>filter_large</code>, <code>spec_small</code>, <code>spec_large</code>. Four routes lead into <strong>one box</strong>. The loyalty check that follows does not know or care which route filled it — it just finds a number there and takes 50p off.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVE 4 -->
+  <div class="move" id="m4">
+    <div class="movehead">
+      <span class="movenum">MOVE 04</span>
+      <span class="movename">ORDER</span>
+    </div>
+    <div class="movebody">
+      <p class="thequestion">Which question picks the rulebook? Which only mean something once it is open? Does everything rejoin?</p>
+
+      <p>Three sub-questions, always taken in this order.</p>
+
+      <h4>a) What is the outer question?</h4>
+
+      <p>Not the most obvious fact. Not the first one mentioned. The one that decides <strong>which set of rules applies</strong>.</p>
+
+      <div class="panel p-rule">
+        <span class="label">The test</span>
+        <p>If you did not know the answer to this question, would the other facts still mean anything?</p>
+        <p>If the answer is <strong>no</strong> — the other facts go inert without it — you have found your outer question.</p>
+      </div>
+
+      <h4>b) What is genuinely inside?</h4>
+
+      <p>A question is nested when it is only meaningful <strong>after</strong> another has been answered. Weight bands mean nothing until you know which price list you're reading. Fine rates mean nothing until you've established the item is overdue.</p>
+
+      <p>A question is <strong>not</strong> nested when it applies regardless of route. Those go afterwards, at the far-left margin, asked once.</p>
+
+      <div class="panel p-trap">
+        <span class="label">Trap</span>
+        <p>The temptation is to put the later question inside every route, because that's the order you thought of it in.</p>
+        <p>Resist it. Six copies of the same discount rule is six chances to get it wrong, and six places to edit when the rate changes. <strong>Wait for the rejoin. Ask once.</strong></p>
+      </div>
+
+      <h4>c) Does every route rejoin?</h4>
+
+      <p>Walk each path to its end. Does it fill the carrier?</p>
+
+      <p>If any path can finish without doing so, you have a hole. It will bite you later as a <code>NameError</code>, or worse, as a silently wrong answer using a value left over from something else.</p>
+
+      <div class="panel p-resolution">
+        <span class="label">Output of this move</span>
+        <p>The outer question, the inner questions, the later questions that apply to everyone, and a confirmation that every single route fills the carrier.</p>
+      </div>
+
+      <div class="applied">
+        <span class="label">Move 4 on the coffee cart</span>
+
+        <p class="answer">Outer question: <strong>is it a speciality coffee?</strong></p>
+
+        <p>Apply the test from part (a). If you did not know whether it was filter or speciality, would <code>cup_size</code> still mean anything?</p>
+
+        <p style="margin-top:14px">No. "Large" on its own is not a price. It could be £2.80 or £3.90, and there is no way to choose between them. The size goes inert without the type. That is the outer question found.</p>
+
+        <p style="margin-top:14px"><strong>Inner question: is it a small cup?</strong> Meaningful only once a price pair has been opened. Inside filter, small means £2.20. Inside speciality, small means £3.10. Same question, two different answers, depending on which world you are standing in.</p>
+
+        <p style="margin-top:14px"><strong>Later, for everyone: do they have a loyalty card?</strong> This one does not care which of the four routes was taken. 50p comes off a filter small exactly as it comes off a speciality large. So it waits at the far-left margin, after the rejoin, and gets asked once.</p>
+
+        <p style="margin-top:14px"><strong>Every route fills the carrier?</strong> Yes — all four end in an assignment to <code>drink_price</code>. Walk them: filter-small, filter-large, speciality-small, speciality-large. Four routes, four assignments, no holes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVE 5 -->
+  <div class="move" id="m5">
+    <div class="movehead">
+      <span class="movenum">MOVE 05</span>
+      <span class="movename">SILHOUETTE</span>
+    </div>
+    <div class="movebody">
+      <p class="thequestion">Sketch the shape in half-English before you write real syntax.</p>
+
+      <p>Write the structure out with proper indentation, but with plain words where the conditions will go.</p>
+
+<pre class="light"><span class="lyr-outer">if &lt;outer question&gt;:</span>
+    <span class="lyr-middle">if &lt;inner question 1&gt;:</span>
+        <span class="lyr-inner">carrier = ...</span>
+    <span class="lyr-middle">elif &lt;inner question 2&gt;:</span>
+        <span class="lyr-inner">carrier = ...</span>
+    <span class="lyr-middle">else:</span>
+        <span class="lyr-inner">carrier = ...</span>
+<span class="lyr-outer">else:</span>
+    <span class="lyr-middle">if &lt;inner question 1&gt;:</span>
+        <span class="lyr-inner">carrier = ...</span>
+    <span class="lyr-middle">...</span>
+
+<span class="lyr-outer">if &lt;the later question, applying to everyone&gt;:</span>
+    <span class="lyr-inner">carrier = adjusted</span></pre>
+
+      <p>The colours track the layers: <span class="lyr-outer">orange is the outer layer</span>, <span class="lyr-middle">blue is the middle</span>, <span class="lyr-inner">green is the innermost work</span>.</p>
+
+      <p>You are checking two things here. That the nesting depth is right, and that the returns to the far-left margin happen where they should.</p>
+
+      <div class="panel p-plain">
+        <span class="label">In plain english</span>
+        <p>Indentation is not decoration. It is a <strong>record of which question you are currently inside</strong>.</p>
+        <p>Coming back out to the margin is the code making a statement: <strong>that whole investigation is finished</strong>, and what follows applies to everybody, whichever route they took to get here.</p>
+      </div>
+
+      <div class="panel p-resolution">
+        <span class="label">Output of this move</span>
+        <p>A sketched shape, correctly indented, with English in the condition slots. <strong>Only now</strong> do you write Python.</p>
+      </div>
+
+      <div class="applied">
+        <span class="label">Move 5 on the coffee cart</span>
+
+        <p>The shape, in half-English:</p>
+
+<pre class="light"><span class="lyr-outer">if &lt;speciality coffee&gt;:</span>
+    <span class="lyr-middle">if &lt;small cup&gt;:</span>
+        <span class="lyr-inner">drink_price = ...</span>
+    <span class="lyr-middle">else:</span>
+        <span class="lyr-inner">drink_price = ...</span>
+<span class="lyr-outer">else:</span>
+    <span class="lyr-middle">if &lt;small cup&gt;:</span>
+        <span class="lyr-inner">drink_price = ...</span>
+    <span class="lyr-middle">else:</span>
+        <span class="lyr-inner">drink_price = ...</span>
+
+<span class="lyr-outer">if &lt;has loyalty card&gt;:</span>
+    <span class="lyr-inner">drink_price = 50p less</span>
+
+<span class="lyr-outer">print the price</span></pre>
+
+        <p>Two checks. Is the nesting depth right? Yes — two levels in Part A, because two questions had to be answered in order. Does the return to the far-left margin happen in the right place? Yes — after all four routes have finished, not inside any of them.</p>
+
+        <p style="margin-top:14px">The sheet is now complete. Only at this point does Python appear.</p>
+      </div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:50px">The coffee cart, finished</h4>
+
+  <p>Five moves done, so the code is now a translation job rather than a thinking job. There is nothing left to decide.</p>
+
+<pre><span class="cmt"># --- Facts ---</span>
+coffee_type = <span class="str">"speciality"</span>
+cup_size = <span class="str">"large"</span>
+has_loyalty_card = <span class="kw">True</span>
+
+
+<span class="cmt"># --- Part A: find the basic drink price ---</span>
+<span class="cmt"># Outer question: which price pair applies?</span>
+<span class="lyr-outer">if</span> coffee_type == <span class="str">"speciality"</span>:
+
+    <span class="cmt"># Inner question: which size, within the speciality pair?</span>
+    <span class="lyr-middle">if</span> cup_size == <span class="str">"small"</span>:
+        drink_price = <span class="num">3.10</span>
+    <span class="lyr-middle">else</span>:
+        drink_price = <span class="num">3.90</span>
+
+<span class="lyr-outer">else</span>:
+
+    <span class="cmt"># Inner question: which size, within the filter pair?</span>
+    <span class="lyr-middle">if</span> cup_size == <span class="str">"small"</span>:
+        drink_price = <span class="num">2.20</span>
+    <span class="lyr-middle">else</span>:
+        drink_price = <span class="num">2.80</span>
+
+
+<span class="cmt"># All four routes have rejoined.</span>
+<span class="cmt"># drink_price holds exactly one value.</span>
+
+
+<span class="cmt"># --- Part B: apply the loyalty discount ---</span>
+<span class="cmt"># Far-left margin: applies to everyone, whatever route they took.</span>
+<span class="lyr-outer">if</span> has_loyalty_card:
+    drink_price = drink_price - <span class="num">0.50</span>
+
+
+<span class="cmt"># --- Output ---</span>
+<span class="kw">print</span>(f<span class="str">"That'll be £{drink_price:.2f} please"</span>)</pre>
+
+  <p>Output:</p>
+
+<pre class="light">That'll be £3.40 please</pre>
+
+  <div class="panel p-resolution">
+    <span class="label">What just happened</span>
+    <p>You did not decide anything while writing that code. Every decision had already been made on the sheet — which question goes outside, which goes inside, what the box is called, where the margin returns.</p>
+    <p>That is the entire purpose of the five moves. <strong>Writing code should be the boring part.</strong> If it feels like the hard part, it means the thinking has not been done yet.</p>
+  </div>
+</section>
+
+<!-- ============ SHEET ============ -->
+<section id="sheet">
+  <div class="sectionhead">
+    <span class="num">03</span>
+    <h3>The blank sheet</h3>
+  </div>
+
+  <p>Copy this for every scenario. Fill it in by hand, on paper, before you go anywhere near a keyboard.</p>
+
+  <div class="sheet"><b>SCENARIO:</b> ________________________________
+
+<b>--- 1. SCENE ---</b>
+At the end, one ______________________ must exist.
+
+Major parts, in order:
+   A. ______________________________________
+   B. ______________________________________
+
+<b>--- 2. CLUES ---</b>
+Fact                States    Boundaries              Job
+________________    ______    __________________      __________________
+________________    ______    __________________      __________________
+________________    ______    __________________      __________________
+
+Noise (facts that cannot change the answer):
+   ______________________________________________
+
+Total branches expected:  ______
+
+<b>--- 3. CARRIER ---</b>
+Name:   _______________________
+Type:   _______________________
+Shape:  single value  /  accumulator  /  pair
+Before the hard part:  ________________________
+After the hard part:   ________________________
+
+<b>--- 4. ORDER ---</b>
+Outer question:        ________________________
+Inner questions:       ________________________
+Later, for everyone:   ________________________
+
+Every route fills the carrier?    YES  /  NO
+
+<b>--- 5. SILHOUETTE ---</b>
+
+
+</div>
+</section>
+
+<!-- ============ SYNTAX ============ -->
+<section id="syntax">
+  <div class="sectionhead">
+    <span class="num">04</span>
+    <h3>The syntax spine</h3>
+  </div>
+
+  <p>Colons and f-strings are the two things you named as a nightmare. Here is the whole of what you need, in one place — and then it appears in every single scenario until it becomes boring.</p>
+
+  <h4 id="colon">The colon rule</h4>
+
+  <div class="panel p-rule">
+    <span class="label">Rule</span>
+    <p style="font-size:19px">A colon means: <strong>what follows is indented, and belongs to me.</strong></p>
+  </div>
+
+  <p>Every line that <strong>opens a block</strong> ends in a colon. That is <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>def</code>. No exceptions anywhere in the language.</p>
+
+<pre><span class="kw">if</span> weight &lt; <span class="num">2</span>:          <span class="cmt"># colon — opens a block</span>
+    charge = <span class="num">8</span>          <span class="cmt"># indented, belongs to the if</span>
+<span class="kw">elif</span> weight &lt; <span class="num">10</span>:       <span class="cmt"># colon</span>
+    charge = <span class="num">12</span>
+<span class="kw">else</span>:                   <span class="cmt"># colon, even with no condition</span>
+    charge = <span class="num">18</span></pre>
+
+  <p><code>else</code> takes a colon even though it asks nothing at all. It still opens a block, so it still gets one.</p>
+
+  <p>Lines that do <strong>not</strong> open a block do not get a colon. <code>charge = 8</code> has none. <code>print(charge)</code> has none.</p>
+
+  <div class="panel p-situation">
+    <span class="label">Quick self-test</span>
+    <p>Does the next line need to be indented?</p>
+    <p>If yes — colon. If no — no colon. That is the entire rule, and it never has an exception.</p>
+  </div>
+
+  <h4 id="fstring">f-strings</h4>
+
+  <p>An f-string lets you drop a variable's value into a piece of text.</p>
+
+  <p>Put an <code>f</code> immediately before the opening quote. Put the variable inside curly braces within the text.</p>
+
+<pre>name = <span class="str">"Maya"</span>
+charge = <span class="num">12</span>
+
+<span class="kw">print</span>(f<span class="str">"Hello {name}, your charge is {charge}"</span>)</pre>
+
+  <p>Output:</p>
+
+<pre class="light">Hello Maya, your charge is 12</pre>
+
+  <div class="panel p-trap">
+    <span class="label">Trap</span>
+    <p>Without the <strong>f</strong>, the braces stay as literal text and nothing gets substituted. This is the single most common f-string mistake, and it fails silently — you get output, it's just wrong.</p>
+  </div>
+
+<pre><span class="kw">print</span>(<span class="str">"Hello {name}"</span>)     <span class="cmt"># prints:  Hello {name}</span>
+<span class="kw">print</span>(f<span class="str">"Hello {name}"</span>)    <span class="cmt"># prints:  Hello Maya</span></pre>
+
+  <p>You can put a calculation inside the braces as well, not just a bare variable name.</p>
+
+<pre><span class="kw">print</span>(f<span class="str">"With VAT: {charge * 1.2}"</span>)</pre>
+
+  <h4 id="twof">The <code>:.2f</code> format specifier</h4>
+
+  <p>That last line gives you <code>14.399999999999999</code>. Nobody wants that on a till receipt. You want two decimal places.</p>
+
+  <p>Inside the braces, after the value, add a colon and a formatting instruction.</p>
+
+<pre><span class="kw">print</span>(f<span class="str">"With VAT: {charge * 1.2:.2f}"</span>)</pre>
+
+  <p>Output:</p>
+
+<pre class="light">With VAT: 14.40</pre>
+
+  <p>Now break that piece <code>{charge * 1.2:.2f}</code> into its parts.</p>
+
+  <table>
+    <tr><th style="width:26%">Part</th><th>Meaning</th></tr>
+    <tr><td><code>charge * 1.2</code></td><td>the value you want shown</td></tr>
+    <tr><td><code>:</code></td><td>"formatting instructions follow"</td></tr>
+    <tr><td><code>.2</code></td><td>two digits after the decimal point</td></tr>
+    <tr><td><code>f</code></td><td>fixed-point — show it as a plain decimal number</td></tr>
+  </table>
+
+  <div class="panel p-plain">
+    <span class="label">In plain english</span>
+    <p>Read the whole thing as: <strong>value, colon, then how to dress it.</strong></p>
+  </div>
+
+  <div class="panel p-trap">
+    <span class="label">Trap · the two colons</span>
+    <p>The colon in <strong>{fee:.2f}</strong> is <strong>not</strong> the same colon as the one after <strong>if</strong>.</p>
+    <p>The block colon means "an indented block follows me". This one lives inside braces inside a string, and means "here come the formatting rules". Same character on the keyboard, completely unrelated job.</p>
+    <p>Do not let the collision throw you. Ask which situation you are in: <strong>opening a block</strong>, or <strong>dressing a value</strong>.</p>
+  </div>
+
+  <p>Money, written out in full:</p>
+
+<pre>charge = <span class="num">12</span>
+<span class="kw">print</span>(f<span class="str">"Total: £{charge:.2f}"</span>)     <span class="cmt"># Total: £12.00</span></pre>
+
+  <p>The <code>£</code> sits <strong>outside</strong> the braces, because it is literal text rather than a value to be looked up.</p>
+
+  <p>Two more you will meet before long:</p>
+
+<pre>pct = <span class="num">0.157</span>
+<span class="kw">print</span>(f<span class="str">"Rate: {pct:.1%}"</span>)          <span class="cmt"># Rate: 15.7%</span>
+
+count = <span class="num">1250000</span>
+<span class="kw">print</span>(f<span class="str">"Count: {count:,}"</span>)         <span class="cmt"># Count: 1,250,000</span></pre>
+</section>
+
+<!-- ============ WORKED ============ -->
+<section id="worked">
+  <div class="sectionhead">
+    <span class="num">05</span>
+    <h3>One fully worked scenario</h3>
+  </div>
+
+  <p>Read this end to end before attempting any drill. This is what a finished sheet actually looks like.</p>
+
+  <div class="panel p-situation">
+    <span class="label">Situation · the vet's out-of-hours desk</span>
+    <p>A veterinary practice charges a consultation fee. During normal hours the fee depends on the animal: <strong>£35</strong> for a small animal, <strong>£55</strong> for a large animal. Out of hours the fees are higher: <strong>£70</strong> small, <strong>£110</strong> large.</p>
+    <p>Separately, clients on the practice's care plan get <strong>20% off</strong> whatever consultation fee applies to them. Clients not on the plan pay the full amount.</p>
+    <p>The receptionist, Ruth, needs <strong>one final amount</strong> to read out to the client.</p>
+  </div>
+
+  <h4>Move 1 · Scene</h4>
+
+  <p>At the end, one <strong>consultation fee in pounds</strong> must exist.</p>
+
+  <ul>
+    <li><strong>Part A</strong> — work out the basic consultation fee.</li>
+    <li><strong>Part B</strong> — apply the care plan discount, if any.</li>
+  </ul>
+
+  <p>B cannot start until A has produced a fee. Sequence confirmed.</p>
+
+  <h4>Move 2 · Clues</h4>
+
+  <table>
+    <tr><th>Fact</th><th>States</th><th>Boundaries</th><th>Job</th></tr>
+    <tr><td><code>is_out_of_hours</code></td><td>2</td><td>— (boolean)</td><td>Selects which fee list applies</td></tr>
+    <tr><td><code>animal_size</code></td><td>2</td><td>small / large</td><td>Picks the fee within that list</td></tr>
+    <tr><td><code>on_care_plan</code></td><td>2</td><td>— (boolean)</td><td>Decides whether Part B changes the fee</td></tr>
+  </table>
+
+  <p><strong>Noise:</strong> the client's name, the animal's name, the reason for the visit. None of these can change the number.</p>
+
+  <p><strong>Branch count for Part A:</strong> 2 × 2 = <strong>four</strong> possible basic fees.</p>
+
+  <p>Part B is a separate two-state decision applied afterwards. It does <strong>not</strong> multiply into Part A — it does not make eight routes. That distinction is the whole reason Part B sits outside.</p>
+
+  <h4>Move 3 · Carrier</h4>
+
+  <table>
+    <tr><th style="width:28%">Name</th><td><code>consultation_fee</code></td></tr>
+    <tr><th>Type</th><td>number — a float, because it is money</td></tr>
+    <tr><th>Shape</th><td>single value</td></tr>
+    <tr><th>Before Part A</th><td>does not exist</td></tr>
+    <tr><th>After Part A</th><td>holds exactly one of 35, 55, 70, 110</td></tr>
+    <tr><th>Part B</th><td>reads it, possibly reduces it, writes it back</td></tr>
+  </table>
+
+  <h4>Move 4 · Order</h4>
+
+  <ul class="spaced">
+    <li><strong>Outer question — is it out of hours?</strong> Because until you know that, the animal size tells you nothing. Two complete fee lists exist and you must open the right one before anything else is meaningful.</li>
+    <li><strong>Inner question — small or large animal?</strong> Only meaningful once a fee list has been chosen.</li>
+    <li><strong>Later, for everyone — is the client on the care plan?</strong> Asked once, at the far-left margin, after all four routes have rejoined.</li>
+  </ul>
+
+  <p><strong>Every route fills the carrier?</strong> Yes — all four end in an assignment to <code>consultation_fee</code>.</p>
+
+  <div class="panel p-trap">
+    <span class="label">Trap</span>
+    <p>Why not put the care plan check inside each of the four routes?</p>
+    <p>Because that writes the same discount logic <strong>four times</strong>, which is four chances to mistype it and four places to edit when the rate changes. Wait for the rejoin. Ask once.</p>
+  </div>
+
+  <h4>Move 5 · Silhouette</h4>
+
+<pre class="light"><span class="lyr-outer">if &lt;out of hours&gt;:</span>
+    <span class="lyr-middle">if &lt;small animal&gt;:</span>
+        <span class="lyr-inner">fee = ...</span>
+    <span class="lyr-middle">else:</span>
+        <span class="lyr-inner">fee = ...</span>
+<span class="lyr-outer">else:</span>
+    <span class="lyr-middle">if &lt;small animal&gt;:</span>
+        <span class="lyr-inner">fee = ...</span>
+    <span class="lyr-middle">else:</span>
+        <span class="lyr-inner">fee = ...</span>
+
+<span class="lyr-outer">if &lt;on care plan&gt;:</span>
+    <span class="lyr-inner">fee = fee reduced by 20%</span>
+
+<span class="lyr-outer">print the fee</span></pre>
+
+  <h4>The code</h4>
+
+<pre><span class="cmt"># --- Facts ---</span>
+is_out_of_hours = <span class="kw">True</span>
+animal_size = <span class="str">"large"</span>
+on_care_plan = <span class="kw">True</span>
+
+
+<span class="cmt"># --- Part A: find the basic consultation fee ---</span>
+<span class="cmt"># Outer question: which fee list applies?</span>
+<span class="lyr-outer">if</span> is_out_of_hours:
+
+    <span class="cmt"># Inner question: which animal, within the out-of-hours list?</span>
+    <span class="lyr-middle">if</span> animal_size == <span class="str">"small"</span>:
+        consultation_fee = <span class="num">70</span>
+    <span class="lyr-middle">else</span>:
+        consultation_fee = <span class="num">110</span>
+
+<span class="lyr-outer">else</span>:
+
+    <span class="cmt"># Inner question: which animal, within the normal-hours list?</span>
+    <span class="lyr-middle">if</span> animal_size == <span class="str">"small"</span>:
+        consultation_fee = <span class="num">35</span>
+    <span class="lyr-middle">else</span>:
+        consultation_fee = <span class="num">55</span>
+
+
+<span class="cmt"># All four routes have now rejoined.</span>
+<span class="cmt"># consultation_fee holds exactly one value.</span>
+
+
+<span class="cmt"># --- Part B: apply the care plan discount ---</span>
+<span class="cmt"># Far-left margin: this applies to everyone, whatever route they took.</span>
+<span class="lyr-outer">if</span> on_care_plan:
+    consultation_fee = consultation_fee * <span class="num">0.80</span>
+
+
+<span class="cmt"># --- Output ---</span>
+<span class="kw">print</span>(f<span class="str">"Consultation fee: £{consultation_fee:.2f}"</span>)</pre>
+
+  <p>Output:</p>
+
+<pre class="light">Consultation fee: £88.00</pre>
+
+  <div class="panel p-resolution">
+    <span class="label">Things to notice before you move on</span>
+    <p>There are <strong>six colons</strong> in that code, and every one of them sits on a line that opens a block. The <strong>else</strong> lines have colons despite asking nothing.</p>
+    <p>Part B is back at the far-left margin. That leftward return is the code saying out loud: <strong>the fee investigation is over</strong>.</p>
+    <p><strong>consultation_fee</strong> is assigned in four places and read in two. One box, many routes into it.</p>
+    <p>The output needed <strong>:.2f</strong>, because 110 × 0.80 gives 88.0 — and a receipt should say 88.00.</p>
+  </div>
+</section>
+
+<!-- ============ DRILLS ============ -->
+<section id="drills">
+  <div class="sectionhead">
+    <span class="num">06</span>
+    <h3>The drills</h3>
+  </div>
+
+  <p>Twenty scenarios. For each one: <strong>sheet first, code second.</strong></p>
+
+  <p>Do not skip the sheet even when the answer feels obvious. The obvious ones are where the habit gets built cheaply — and cheap repetitions are the ones you can afford lots of.</p>
+
+  <p>Work through them in order. The structure changes deliberately as you go.</p>
+
+  <!-- TIER 1 -->
+  <div class="tier" id="tier1">
+    <p class="tiername">Tier 1 · Two facts, one nest</p>
+    <p class="tiernote">Drills 1–6. The same skeleton as the worked example, in a different world every time.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">01</span><span class="dname">The ferry</span></div>
+    <p>A ferry charges per vehicle. On weekdays: <strong>£25</strong> for a car, <strong>£45</strong> for a van. At weekends: <strong>£35</strong> for a car, <strong>£60</strong> for a van. Vehicles carrying a blue badge holder get <strong>£10 off</strong> the fare. Print the final fare.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">02</span><span class="dname">The climbing wall</span></div>
+    <p>Entry costs <strong>£14</strong> for an adult and <strong>£8</strong> for a child during peak hours. Off-peak it is <strong>£10</strong> adult, <strong>£6</strong> child. Anyone bringing their own harness gets <strong>£2 off</strong>. Print what they pay.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">03</span><span class="dname">The print shop</span></div>
+    <p>A print shop charges by paper size and finish. Standard finish: <strong>£0.15</strong> per page for A4, <strong>£0.30</strong> for A3. Premium finish: <strong>£0.40</strong> for A4, <strong>£0.75</strong> for A3. The customer states how many pages. Orders over <strong>500 pages</strong> get 10% off the total. Print the total cost.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">04</span><span class="dname">The car park</span></div>
+    <p>For stays under 3 hours: <strong>£4</strong> surface, <strong>£7</strong> multi-storey. For stays of 3 hours or more: <strong>£9</strong> surface, <strong>£15</strong> multi-storey. Residents with a permit pay half. Print the charge.</p>
+    <p class="twist">Watch the boundary. Where exactly does "under 3 hours" end, and which side does 3.0 sit on?</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">05</span><span class="dname">The kennels</span></div>
+    <p>Boarding costs <strong>£22</strong> per night for a small dog and <strong>£30</strong> for a large dog in the standard block. In the heated block it is <strong>£35</strong> and <strong>£45</strong>. The owner states the number of nights. Bookings of 7 nights or more get 15% off. Print the total.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">06</span><span class="dname">The exam entry</span></div>
+    <p>An entry fee is <strong>£48</strong> for a first attempt and <strong>£62</strong> for a resit, if entering before the deadline. After the deadline both rise by a flat <strong>£25</strong> late fee. Candidates receiving financial support pay nothing at all. Print the fee.</p>
+    <p class="twist">Careful — the late fee is <em>added</em>, not a separate price list. Does that change what your outer question should be? Justify your answer on the sheet.</p>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="tier" id="tier2">
+    <p class="tiername">Tier 2 · More facts, noise, wider state counts</p>
+    <p class="tiernote">Drills 7–13. Now the sheet has to do real work before the code can.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">07</span><span class="dname">The bike hire</span></div>
+    <p>Hybrid bikes: <strong>£8</strong> up to 2 hours, <strong>£14</strong> up to 6 hours, <strong>£20</strong> for a full day. Electric bikes: <strong>£15</strong>, <strong>£25</strong>, <strong>£38</strong> for the same durations. Members get 20% off. The shop is on Mill Street and the customer's name is Aisha. Print the charge.</p>
+    <p class="twist">Two of the facts in that paragraph are noise. Identify them explicitly on the sheet rather than just ignoring them.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">08</span><span class="dname">The pottery kiln</span></div>
+    <p>Earthenware: <strong>£5</strong> small, <strong>£9</strong> medium, <strong>£16</strong> large. Stoneware: <strong>£8</strong>, <strong>£14</strong>, <strong>£24</strong>. Porcelain: <strong>£12</strong>, <strong>£20</strong>, <strong>£34</strong>. Studio members get their first firing of the month free; everyone else pays full price. Print the cost.</p>
+    <p class="twist">Three states in the outer question now, not two. What does that do to your if / elif / else?</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">09</span><span class="dname">The allotment</span></div>
+    <p>Full plots: <strong>£95</strong> a year standard, <strong>£60</strong> concession. Half plots: <strong>£55</strong> / <strong>£35</strong>. Quarter plots: <strong>£30</strong> / <strong>£20</strong>. Tenants on the committee get <strong>£15 off</strong>. Print the annual rent.</p>
+    <p class="twist">Is plot size the outer question, or is tenant status? Try it both ways on the sheet and argue for one.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">10</span><span class="dname">The bakery order</span></div>
+    <p>Sponge cakes: <strong>£28</strong> for 6 inch, <strong>£40</strong> for 8 inch, <strong>£58</strong> for 10 inch. Fruit cakes: <strong>£35</strong>, <strong>£52</strong>, <strong>£74</strong>. A written message costs <strong>£6</strong>. A sugar-flower decoration costs <strong>£18</strong>. A customer may add neither, either, or both. Print the total.</p>
+    <p class="twist">Two independent add-ons after the rejoin, not one. How does that change the shape of Part B?</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">11</span><span class="dname">The council tip</span></div>
+    <p>Rubble: <strong>£12</strong> per load for householders, <strong>£45</strong> for traders. Green waste: free for householders, <strong>£20</strong> for traders. Plasterboard: <strong>£25</strong> / <strong>£60</strong>. Anyone arriving in a van is charged the trader rate regardless of who they actually are. Print the charge.</p>
+    <p class="twist">That last sentence is doing something sneaky to your fact list. Deal with it on the sheet before you touch any code.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">12</span><span class="dname">The theatre seat</span></div>
+    <p>Evening performance: stalls <strong>£45</strong>, circle <strong>£35</strong>, balcony <strong>£22</strong>. For a matinee, all prices drop by a third. Under-16s and over-65s pay 50% of whatever price applies to them. Print the ticket price.</p>
+    <p class="twist">Two separate conditions lead to the same concession. What does that suggest about how you write the test?</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">13</span><span class="dname">The plant nursery</span></div>
+    <p>Priced by pot size: 9cm <strong>£3.50</strong>, 1 litre <strong>£6</strong>, 3 litre <strong>£11</strong>, 10 litre <strong>£28</strong>. Trade customers get 30% off. Retail customers spending £50 or more get 10% off. Nobody gets both. Print the price for a single plant.</p>
+    <p class="twist">Then state on your sheet what would change if the customer bought several plants rather than one.</p>
+  </div>
+
+  <!-- TIER 3 -->
+  <div class="tier" id="tier3">
+    <p class="tiername">Tier 3 · Structure that breaks the pattern</p>
+    <p class="tiernote">Drills 14–20. The skeleton still applies. It just stops looking like it does.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">14</span><span class="dname">The blood donation screener</span></div>
+    <p>A donor is eligible if they are aged 17 to 65, weigh at least 50 kg, and have not donated in the last 12 weeks. If they are outside the age range, print that specific reason. If underweight, print that reason. If they donated too recently, print how many more weeks they must wait. If everything passes, print that they are eligible.</p>
+    <p class="twist">Your carrier here is not a number. What is it? And what is the correct order of gates?</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">15</span><span class="dname">The parcel locker</span></div>
+    <p>Lockers are assigned by parcel size — small to size S, medium to M, large to L. If the recipient requested ground level and a ground-level locker of the right size is free, assign that. If not, assign any locker of the right size. If no locker of the right size is free at all, the parcel goes to the collection desk. Print the assignment.</p>
+    <p class="twist">Two carriers, or one? Argue it on the sheet before you decide.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">16</span><span class="dname">The tiered water bill</span></div>
+    <p>The first 20 cubic metres cost <strong>£1.10</strong> each. The next 30 cost <strong>£1.80</strong> each. Everything above 50 costs <strong>£2.60</strong> each. A household on the social tariff has the total reduced by 25%. Print the bill.</p>
+    <p class="twist">This one is not "pick a band" — it is "accumulate across bands". Your carrier starts at zero and grows. Say so on the sheet before you write anything at all.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">17</span><span class="dname">The overdue account</span></div>
+    <p>Under 30 days late: a reminder email, whatever the value. 30 to 89 days: email for accounts under £500, phone call for £500 or more. 90 days or more: phone call under £500, referral to collections for £500 or more. Accounts flagged as being in hardship never go to collections — they get a phone call instead. Print the action.</p>
+    <p class="twist">The hardship rule overrides a decision made earlier. Where does that check go — before, inside, or after? Justify it.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">18</span><span class="dname">The school trip roster</span></div>
+    <p>A list of pupils, each with a name, an age, whether a consent form is returned, and whether they have paid. Loop the list. Print each pupil's status, count how many are cleared to travel (form returned <em>and</em> paid), count how many are blocked, and print the two counts at the end.</p>
+    <p class="twist">Carriers that accumulate inside a loop. Name them on the sheet, and say what they hold before the loop starts.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">19</span><span class="dname">The takeaway delivery fee</span></div>
+    <p>Delivery is free on orders of £30 or more within 3 miles. Between 3 and 6 miles it is free on orders of £45 or more. Beyond 6 miles delivery is not offered. Where delivery is not free, it costs <strong>£2.50</strong> within 3 miles and <strong>£4.50</strong> between 3 and 6. Orders under £12 are not accepted at all. Print either the fee or a refusal message.</p>
+    <p class="twist">Which gate disqualifies fastest? Put that one first and watch how much of the rest collapses.</p>
+  </div>
+
+  <div class="drill">
+    <div class="dhead"><span class="dnum">20</span><span class="dname">The grading moderator</span></div>
+    <p>A cohort of results, each with a raw mark and whether the pupil had approved extra time. Bands: under 40 fail, 40–54 pass, 55–69 merit, 70 and above distinction. Any pupil with approved extra time whose mark falls within 2 of a band boundary is lifted to the higher band. Loop the cohort, print each pupil's final band, and print how many were lifted.</p>
+    <p class="twist">Everything in this pack, at once. Take your time on the sheet — the code will be far shorter than you fear, if the sheet is right.</p>
+  </div>
+</section>
+
+<!-- ============ AFTER ============ -->
+<section id="after">
+  <div class="sectionhead">
+    <span class="num">07</span>
+    <h3>After each drill</h3>
+  </div>
+
+  <p>Three questions, every time, thirty seconds. This is where the retention actually happens — not during the drill, but here.</p>
+
+  <div class="panel p-situation">
+    <span class="label">Question one</span>
+    <p><strong>Which move did I want to skip?</strong></p>
+    <p>That is your weak move. Name it out loud. It will be the same one for a while, and then one day it won't be.</p>
+  </div>
+
+  <div class="panel p-situation">
+    <span class="label">Question two</span>
+    <p><strong>Did my branch count from Move 2 match the number of branches in my code?</strong></p>
+    <p>If not — where did the mismatch come from? A miscount on the sheet, or a route you forgot to write?</p>
+  </div>
+
+  <div class="panel p-situation">
+    <span class="label">Question three</span>
+    <p><strong>Would I get this right cold in a fortnight?</strong></p>
+    <p>If no, mark the drill and come back to it in three days.</p>
+  </div>
+</section>
+
+<!-- ============ HOWTO ============ -->
+<section id="howto">
+  <div class="sectionhead">
+    <span class="num">08</span>
+    <h3>How to use this pack</h3>
+  </div>
+
+  <div class="panel p-trap">
+    <span class="label">Trap</span>
+    <p>Do not do twenty in a day. You will get faster and remember less — which is exactly the failure mode you are here to fix.</p>
+  </div>
+
+  <ul class="spaced">
+    <li><strong>Three to four drills per session</strong>, spread across days.</li>
+    <li><strong>Re-do drill 1 after drill 8.</strong> Then again after drill 15. Cold, from the scenario text, without looking at your old sheet.</li>
+    <li>That spacing is what converts it from something you <strong>did</strong> into something you <strong>know</strong>. It is uncomfortable on purpose.</li>
+  </ul>
+
+  <div class="panel p-resolution">
+    <span class="label">Resolution</span>
+    <p>When the sheet starts to feel like an annoying formality, that is not a sign to stop.</p>
+    <p>That is the target arriving.</p>
+  </div>
+
+  <p>The point is never the ferry, the vet, or the pottery kiln. The point is that by drill 20 you can read a scenario you have never seen before and know, without effort, that your first job is to finish the sentence:</p>
+
+  <div class="mantra" style="font-size:22px">
+    At the end, one ______ must exist.
+  </div>
+
+  <div class="footer">
+    <p>The Five Moves · a drill pack for Python flow control · Scene → Clues → Carrier → Order → Silhouette</p>
+  </div>
+</section>
+
+</main>
+</div>
+</body>
+</html>
