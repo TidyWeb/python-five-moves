@@ -1,5 +1,5 @@
 # The Five Moves
 
-## [🌐 Open the live site: https://tidyweb.github.io/python-five-moves/ ↗](https://tidyweb.github.io/python-five-moves/)
+### [Visit the live site ↗](https://tidyweb.github.io/python-five-moves/)
 
 A drill pack for practising five core moves in Python flow control.
